@@ -4,12 +4,12 @@ import json
 from datetime import datetime
 
 
-def getSheet(sheet_name):
+def __getSheet(sheet_name):
     wb = pd.read_excel('Horario.xlsx', sheet_name=sheet_name)
     datos = wb.to_dict(orient='record')
     return datos
 
-def getSheetData(sheet_name, datos):
+def __getSheetData(sheet_name, datos):
     rows = len(datos)
     obj = {}
     for i in range(rows):
@@ -34,7 +34,7 @@ def getSheetData(sheet_name, datos):
 
     return obj
 
-def getArray(obj):
+def __getArray(obj):
     data = []
     for day in obj.keys():
         tasks = obj[day]
@@ -44,7 +44,7 @@ def getArray(obj):
     return data
 
 
-def getHours(data,input):
+def __getHours(data,input):
     days = input.keys()
     obj = {}
     acum = 0
@@ -63,7 +63,7 @@ def getHours(data,input):
     return obj
 
 
-def getTickets(data):
+def __getTickets(data):
     obj = {}
     for day in data.keys():
         obj[day] = {}
@@ -80,13 +80,14 @@ def getTickets(data):
 
     return obj
 
+def init():
+    datos1 = __getSheet('Horario')
+    datos2 = __getSheet('Imputadas')
 
-datos1 = getSheet('Horario')
-datos2 = getSheet('Imputadas')
+    data1 = __getSheetData('Horario', datos1)
+    data2 = __getSheetData('Imputadas', datos2)
+    __getHours(data1, data2)
 
+    tickets = __getTickets(data1)
+    print(tickets)
 
-data1 = getSheetData('Horario',datos1)
-data2 = getSheetData('Imputadas',datos2)
-getHours(data1,data2)
-
-tickets = getTickets(data1)
